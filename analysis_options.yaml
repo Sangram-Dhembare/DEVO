@@ -5,3 +5,4 @@ analyzer:
     - build/**
     - macos/**
     - ios/**
+    - android/**

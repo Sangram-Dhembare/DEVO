@@ -18,7 +18,7 @@ class CampusVoteApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: teal,
+          seedColor: const Color.fromARGB(255, 124, 51, 24),
           primary: navy,
           secondary: teal,
           surface: const Color(0xFFF7F8FA),
