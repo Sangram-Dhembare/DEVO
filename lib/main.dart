@@ -97,6 +97,15 @@ class RoleLauncherPage extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(height: 24),
+                Text(
+                  'FEATURED ELECTION',
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: const Color(0xFF66727E),
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1,
+                      ),
+                ),
+                const SizedBox(height: 10),
                 const _ElectionCard(),
                 const SizedBox(height: 28),
                 Text(
