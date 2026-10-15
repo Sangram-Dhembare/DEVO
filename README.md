@@ -1,6 +1,6 @@
 # CampusVote Flutter app
 
-This is the initial Flutter app foundation for CampusVote, based on `DEVO.pdf`.
+This is the initial Flutter app foundation for CampusVote,
 It provides a role launcher for the four client surfaces in the specification:
 
 - Election administration
