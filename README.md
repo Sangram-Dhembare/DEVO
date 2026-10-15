@@ -31,7 +31,7 @@ flutter test
 
 ## Next implementation steps
 
-Follow the build order in `DEVO.pdf`: implement and test the election
+Follow the build order to implement and test the election
 configuration, voter roll, and cryptographic core before wiring any client
 flow to a real backend. Split the role destinations into separate applications
 when their device permissions and deployment requirements are introduced.
