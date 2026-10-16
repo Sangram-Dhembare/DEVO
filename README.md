@@ -8,11 +8,14 @@ It provides a role launcher for the four client surfaces in the specification:
 - Voting terminal
 - Trustee tool
 
-The role destinations are intentionally demo placeholders. This app does not
+The role destinations are intentionally demo placeholders. The app does not
 authenticate voters, read NFC cards, issue tokens, encrypt ballots, submit
 votes, or publish anything to Solana. Do not use it to run a real election.
-The cryptographic core must be implemented and reviewed separately; the spec
-calls for Rust rather than Dart for security-critical cryptography.
+`lib/election_config.dart` implements the first Phase 1 building block: parsing
+and validating the election configuration format from `DEVO.pdf` and hashing
+its canonical JSON representation with SHA-256. The voter roll, Merkle root,
+and cryptographic core are not implemented; security-critical cryptography
+must use the Rust implementation called for by the spec, not Dart.
 
 ## Run
 
@@ -31,7 +34,6 @@ flutter test
 
 ## Next implementation steps
 
-Follow the build order to implement and test the election
-configuration, voter roll, and cryptographic core before wiring any client
-flow to a real backend. Split the role destinations into separate applications
-when their device permissions and deployment requirements are introduced.
+Continue Phase 1 in `DEVO.pdf`: implement voter-roll handling and Merkle-root
+generation, then the Rust cryptographic core and tally tests. Build the backend
+and separate role applications only after these foundations are in place.
