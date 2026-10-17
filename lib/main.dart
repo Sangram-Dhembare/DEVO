@@ -8,7 +8,6 @@ class _AppColors {
   static const label = Color(0xFF1C1C1E);
   static const secondaryLabel = Color(0xFF636366);
   static const tertiaryLabel = Color(0xFF8E8E93);
-  static const separator = Color(0xFFD1D1D6);
   static const navy = Color(0xFF1C3557);
 }
 
@@ -47,8 +46,8 @@ class CampusVoteApp extends StatelessWidget {
           color: _AppColors.surface,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: const BorderSide(color: _AppColors.separator, width: 0.5),
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: Color(0xFFE4E8EF)),
           ),
         ),
         filledButtonTheme: FilledButtonThemeData(
@@ -112,10 +111,12 @@ class RoleLauncherPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         color: _AppColors.label,
                         fontWeight: FontWeight.w700,
-                        height: 1.15,
+                        height: 1.08,
+                        letterSpacing: -1,
+                        fontSize: 36,
                       ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Text(
                   'Choose a workspace to explore the first CampusVote app '
                   'prototype.',
@@ -125,23 +126,49 @@ class RoleLauncherPage extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(height: 24),
-                Text(
-                  'FEATURED ELECTION',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: _AppColors.tertiaryLabel,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1,
-                      ),
+                Row(
+                  children: [
+                    Text(
+                      'FEATURED ELECTION',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: _AppColors.tertiaryLabel,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1,
+                          ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 15,
+                      color: _AppColors.tertiaryLabel,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10),
                 const _ElectionCard(),
                 const SizedBox(height: 28),
-                Text(
-                  'Workspaces',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: _AppColors.label,
-                        fontWeight: FontWeight.w700,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Workspaces',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: _AppColors.label,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -0.3,
+                            ),
                       ),
+                    ),
+                    Text(
+                      '4 TOOLS',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: _AppColors.tertiaryLabel,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.7,
+                          ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
                 for (final role in roles) ...[
@@ -287,23 +314,84 @@ class _VotingTerminalPageState extends State<_VotingTerminalPage> {
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         color: _AppColors.label,
                         fontWeight: FontWeight.w700,
+                        letterSpacing: -0.5,
                       ),
                 ),
                 const SizedBox(height: 6),
-                Text(
-                  'Example University · 2 positions',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: _AppColors.secondaryLabel,
-                      ),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.account_balance_outlined,
+                      size: 17,
+                      color: _AppColors.tertiaryLabel,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Example University · 2 positions',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: _AppColors.secondaryLabel,
+                          ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20),
-                LinearProgressIndicator(value: selectedCount / 2),
-                const SizedBox(height: 8),
-                Text(
-                  '$selectedCount of 2 positions selected',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: _AppColors.secondaryLabel,
-                      ),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFFE4E8EF)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Your ballot',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: _AppColors.label,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                              ),
+                            ),
+                            Text(
+                              '$selectedCount / 2',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                    color: _AppColors.primary,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: LinearProgressIndicator(
+                            value: selectedCount / 2,
+                            minHeight: 8,
+                            backgroundColor: const Color(0xFFE9EEF5),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '$selectedCount of 2 positions selected',
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: _AppColors.secondaryLabel,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 24),
                 _BallotPosition(
@@ -392,12 +480,42 @@ class _BallotPosition extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: _AppColors.label,
-                fontWeight: FontWeight.w700,
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: _AppColors.label,
+                      fontWeight: FontWeight.w700,
+                    ),
               ),
+            ),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: groupValue == null
+                    ? const Color(0xFFF0F2F5)
+                    : const Color(0xFFE5F0FF),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 9,
+                  vertical: 5,
+                ),
+                child: Text(
+                  groupValue == null ? 'REQUIRED' : 'SELECTED',
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: groupValue == null
+                            ? _AppColors.secondaryLabel
+                            : _AppColors.primary,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.4,
+                      ),
+                ),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 4),
         Text(
@@ -408,17 +526,43 @@ class _BallotPosition extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         for (final (name, affiliation) in candidates) ...[
-          Card(
-            margin: const EdgeInsets.only(bottom: 8),
-            clipBehavior: Clip.antiAlias,
-            child: RadioListTile<String>(
-              value: name,
-              groupValue: groupValue,
-              onChanged: onChanged,
-              title: Text(name),
-              subtitle: Text('$affiliation · Example candidate'),
-              activeColor: _AppColors.primary,
-            ),
+          Builder(
+            builder: (context) {
+              final isSelected = groupValue == name;
+              return Card(
+                margin: const EdgeInsets.only(bottom: 8),
+                elevation: isSelected ? 1 : 0,
+                shadowColor: const Color(0x1F007AFF),
+                color: isSelected ? const Color(0xFFF3F8FF) : Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(
+                    color: isSelected
+                        ? const Color(0xFF8DBBFF)
+                        : const Color(0xFFE4E8EF),
+                    width: isSelected ? 1.3 : 1,
+                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: RadioListTile<String>(
+                  value: name,
+                  groupValue: groupValue,
+                  onChanged: onChanged,
+                  selected: isSelected,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 14),
+                  title: Text(
+                    name,
+                    style: TextStyle(
+                      color: _AppColors.label,
+                      fontWeight:
+                          isSelected ? FontWeight.w700 : FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text('$affiliation · Example candidate'),
+                  activeColor: _AppColors.primary,
+                ),
+              );
+            },
           ),
         ],
       ],
@@ -465,108 +609,136 @@ class _ElectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.zero,
-      color: _AppColors.navy,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.account_balance_outlined, color: Colors.white),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'Example University',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                ),
-                const _ElectionStatus(),
-              ],
-            ),
-            const SizedBox(height: 18),
-            Text(
-              'Student Council 2026',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Polling · 5 Nov 2026 · 09:00–17:00',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: const Color(0xFFE5EAF1),
-                  ),
-            ),
-            const SizedBox(height: 18),
-            const Divider(color: Color(0xFF40536B), height: 1),
-            const SizedBox(height: 14),
-            const Wrap(
-              spacing: 22,
-              runSpacing: 10,
-              children: [
-                _ElectionDetail(value: '2', label: 'positions'),
-                _ElectionDetail(value: '8', label: 'candidates'),
-                _ElectionDetail(value: '3 of 5', label: 'trustees needed'),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const Divider(color: Color(0xFF40536B), height: 1),
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                const Icon(
-                  Icons.hub_outlined,
-                  size: 18,
-                  color: Color(0xFFD7C4FF),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Ethereum integration',
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
+      elevation: 5,
+      shadowColor: const Color(0x2E1C3557),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+      clipBehavior: Clip.antiAlias,
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [_AppColors.navy, Color(0xFF234D70)],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: const Color(0x1FFFFFFF),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const SizedBox(
+                      width: 38,
+                      height: 38,
+                      child: Icon(
+                        Icons.account_balance_outlined,
+                        color: Colors.white,
+                        size: 20,
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'Sepolia testnet · proof of concept',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: const Color(0xFFE5EAF1),
-                            ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF3E3159),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  const SizedBox(width: 10),
+                  Expanded(
                     child: Text(
-                      'PLANNED',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: const Color(0xFFE0D2FF),
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.5,
+                      'Example University',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
                           ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  const _ElectionStatus(),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Text(
+                'Student Council 2026',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Polling · 5 Nov 2026 · 09:00–17:00',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: const Color(0xFFE5EAF1),
+                    ),
+              ),
+              const SizedBox(height: 18),
+              const Divider(color: Color(0xFF40536B), height: 1),
+              const SizedBox(height: 14),
+              const Wrap(
+                spacing: 22,
+                runSpacing: 10,
+                children: [
+                  _ElectionDetail(value: '2', label: 'positions'),
+                  _ElectionDetail(value: '8', label: 'candidates'),
+                  _ElectionDetail(value: '3 of 5', label: 'trustees needed'),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const Divider(color: Color(0xFF40536B), height: 1),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.hub_outlined,
+                    size: 18,
+                    color: Color(0xFFD7C4FF),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Ethereum integration',
+                          style:
+                              Theme.of(context).textTheme.labelLarge?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Sepolia testnet · proof of concept',
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: const Color(0xFFE5EAF1),
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF3E3159),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      child: Text(
+                        'PLANNED',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: const Color(0xFFE0D2FF),
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.5,
+                            ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -593,12 +765,16 @@ class _RoleCard extends StatelessWidget {
               DecoratedBox(
                 decoration: BoxDecoration(
                   color: const Color(0xFFE5F0FF),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 child: SizedBox(
-                  width: 48,
-                  height: 48,
-                  child: Icon(role.icon, color: _AppColors.primary),
+                  width: 52,
+                  height: 52,
+                  child: Icon(
+                    role.icon,
+                    color: _AppColors.primary,
+                    size: 23,
+                  ),
                 ),
               ),
               const SizedBox(width: 14),
@@ -626,8 +802,8 @@ class _RoleCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               const Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
+                Icons.arrow_forward_rounded,
+                size: 20,
                 color: _AppColors.tertiaryLabel,
               ),
             ],
@@ -684,12 +860,27 @@ class _Brand extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.how_to_vote_rounded, color: _AppColors.primary),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: _AppColors.primary,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const SizedBox(
+            width: 34,
+            height: 34,
+            child: Icon(
+              Icons.how_to_vote_rounded,
+              color: Colors.white,
+              size: 19,
+            ),
+          ),
+        ),
         const SizedBox(width: 8),
         Text(
           'CampusVote',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
+                letterSpacing: -0.4,
               ),
         ),
       ],
