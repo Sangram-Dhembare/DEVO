@@ -69,23 +69,23 @@ class CampusVoteApp extends StatelessWidget {
 class RoleLauncherPage extends StatelessWidget {
   const RoleLauncherPage({super.key});
 
-  static const roles = <_AppRole>[
-    _AppRole(
+  static const roles = <AppRole>[
+    AppRole(
       title: 'Admin dashboard',
       description: 'Set up elections and prepare the voter roll.',
       icon: Icons.fact_check_outlined,
     ),
-    _AppRole(
+    AppRole(
       title: 'Check-in desk',
       description: 'Verify a voter and begin the anonymous token flow.',
       icon: Icons.badge_outlined,
     ),
-    _AppRole(
+    AppRole(
       title: 'Voting terminal',
       description: 'Guide a voter through a supervised ballot.',
       icon: Icons.how_to_vote_outlined,
     ),
-    _AppRole(
+    AppRole(
       title: 'Trustee tool',
       description: 'Prepare for the offline key ceremony and tally.',
       icon: Icons.key_outlined,
@@ -200,7 +200,7 @@ class RoleLauncherPage extends StatelessWidget {
 class RoleLandingPage extends StatelessWidget {
   const RoleLandingPage({required this.role, super.key});
 
-  final _AppRole role;
+  final AppRole role;
 
   @override
   Widget build(BuildContext context) {
@@ -382,13 +382,49 @@ class _VotingTerminalPageState extends State<_VotingTerminalPage> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          '$selectedCount of 2 positions selected',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: _AppColors.secondaryLabel,
-                                  ),
+                        Row(
+                          children: [
+                            Icon(
+                              selectedCount == 2
+                                  ? Icons.check_circle_rounded
+                                  : Icons.info_outline_rounded,
+                              size: 16,
+                              color: selectedCount == 2
+                                  ? _AppColors.secondary
+                                  : _AppColors.tertiaryLabel,
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                selectedCount == 2
+                                    ? 'Both positions selected. Your ballot is '
+                                        'ready to review.'
+                                    : 'Choose a candidate for each position '
+                                        'to continue.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: _AppColors.secondaryLabel,
+                                    ),
+                              ),
+                            ),
+                          ],
                         ),
+                        if (selectedCount > 0)
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  _presidentSelection = null;
+                                  _vicePresidentSelection = null;
+                                });
+                              },
+                              icon: const Icon(Icons.refresh_rounded, size: 18),
+                              label: const Text('Clear selections'),
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -544,22 +580,68 @@ class _BallotPosition extends StatelessWidget {
                   ),
                 ),
                 clipBehavior: Clip.antiAlias,
-                child: RadioListTile<String>(
-                  value: name,
-                  groupValue: groupValue,
-                  onChanged: onChanged,
-                  selected: isSelected,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 14),
-                  title: Text(
-                    name,
-                    style: TextStyle(
-                      color: _AppColors.label,
-                      fontWeight:
-                          isSelected ? FontWeight.w700 : FontWeight.w600,
+                child: InkWell(
+                  onTap: () => onChanged(name),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 22,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: isSelected
+                                  ? _AppColors.primary
+                                  : const Color(0xFFB8C3CF),
+                              width: 2,
+                            ),
+                            color: isSelected
+                                ? _AppColors.primary
+                                : Colors.transparent,
+                          ),
+                          child: isSelected
+                              ? const Icon(
+                                  Icons.check,
+                                  size: 14,
+                                  color: Colors.white,
+                                )
+                              : null,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                name,
+                                style: TextStyle(
+                                  color: _AppColors.label,
+                                  fontWeight: isSelected
+                                      ? FontWeight.w700
+                                      : FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                '$affiliation · Example candidate',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: _AppColors.secondaryLabel,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  subtitle: Text('$affiliation · Example candidate'),
-                  activeColor: _AppColors.primary,
                 ),
               );
             },
@@ -748,7 +830,7 @@ class _ElectionCard extends StatelessWidget {
 class _RoleCard extends StatelessWidget {
   const _RoleCard({required this.role, required this.onTap});
 
-  final _AppRole role;
+  final AppRole role;
   final VoidCallback onTap;
 
   @override
@@ -942,8 +1024,8 @@ class _ElectionDetail extends StatelessWidget {
   }
 }
 
-class _AppRole {
-  const _AppRole({
+class AppRole {
+  const AppRole({
     required this.title,
     required this.description,
     required this.icon,

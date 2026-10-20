@@ -63,17 +63,36 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Student Council 2026'), findsOneWidget);
-    expect(find.text('0 of 2 positions selected'), findsOneWidget);
+    expect(
+      find.text('Choose a candidate for each position to continue.'),
+      findsOneWidget,
+    );
 
     final presidentChoice = find.text('Avery Chen');
     await tester.scrollUntilVisible(presidentChoice, 300);
     await tester.tap(presidentChoice);
     await tester.pump();
+    await tester.scrollUntilVisible(
+      find.text('Student Council 2026'),
+      -300,
+    );
+    expect(
+      find.text('Choose a candidate for each position to continue.'),
+      findsOneWidget,
+    );
 
     final vicePresidentChoice = find.text('Riley Kim');
     await tester.scrollUntilVisible(vicePresidentChoice, 300);
     await tester.tap(vicePresidentChoice);
     await tester.pump();
+    await tester.scrollUntilVisible(
+      find.text('Student Council 2026'),
+      -300,
+    );
+    expect(
+      find.text('Both positions selected. Your ballot is ready to review.'),
+      findsOneWidget,
+    );
 
     final reviewButton = find.text('Review ballot');
     await tester.scrollUntilVisible(reviewButton, 300);
@@ -95,5 +114,30 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Submit vote'), findsNothing);
+  });
+
+  testWidgets('clears local ballot selections before review', (tester) async {
+    await tester.pumpWidget(const CampusVoteApp());
+
+    final terminal = find.text('Voting terminal');
+    await tester.scrollUntilVisible(terminal, 300);
+    await tester.tap(terminal);
+    await tester.pumpAndSettle();
+
+    final presidentChoice = find.text('Avery Chen');
+    await tester.scrollUntilVisible(presidentChoice, 300);
+    await tester.tap(presidentChoice);
+    await tester.pump();
+
+    final clearButton = find.text('Clear selections');
+    await tester.scrollUntilVisible(clearButton, -300);
+    await tester.tap(clearButton);
+    await tester.pump();
+
+    expect(find.text('0 / 2'), findsOneWidget);
+    expect(
+      find.text('Choose a candidate for each position to continue.'),
+      findsOneWidget,
+    );
   });
 }
