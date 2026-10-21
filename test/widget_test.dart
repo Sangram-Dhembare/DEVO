@@ -3,6 +3,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  testWidgets('administration workspace opens as a prototype', (tester) async {
+    await _openWorkspace(tester, 'Admin dashboard');
+
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text('Admin dashboard'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Back to workspaces'), findsOneWidget);
+    expect(find.textContaining('Prototype only.'), findsOneWidget);
+  });
+
+  testWidgets('check-in workspace opens as a prototype', (tester) async {
+    await _openWorkspace(tester, 'Check-in desk');
+
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text('Check-in desk'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Prototype only.'), findsOneWidget);
+  });
+
+  testWidgets('voting workspace opens as a local prototype', (tester) async {
+    await _openWorkspace(tester, 'Voting terminal');
+
+    expect(find.text('Student Council 2026'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Review ballot'), 300);
+    expect(find.text('Review ballot'), findsOneWidget);
+    expect(find.textContaining('Prototype only.'), findsOneWidget);
+  });
+
+  testWidgets('trustee workspace opens as a prototype', (tester) async {
+    await _openWorkspace(tester, 'Trustee tool');
+
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text('Trustee tool'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Prototype only.'), findsOneWidget);
+  });
+
   testWidgets('uses a consistent light system color palette', (tester) async {
     await tester.pumpWidget(const CampusVoteApp());
 
@@ -20,9 +69,9 @@ void main() {
     expect(find.text('DEMO'), findsNothing);
     expect(find.text('FEATURED ELECTION'), findsOneWidget);
     expect(find.text('Student Council 2026'), findsOneWidget);
-    expect(find.text('Ethereum integration'), findsOneWidget);
-    expect(find.text('Sepolia testnet · proof of concept'), findsOneWidget);
-    expect(find.text('PLANNED'), findsOneWidget);
+    expect(find.text('On-chain integration'), findsOneWidget);
+    expect(find.text('No contract or testnet integration'), findsOneWidget);
+    expect(find.text('NOT IMPLEMENTED'), findsOneWidget);
     for (final workspace in [
       'Admin dashboard',
       'Check-in desk',
@@ -140,4 +189,12 @@ void main() {
       findsOneWidget,
     );
   });
+}
+
+Future<void> _openWorkspace(WidgetTester tester, String title) async {
+  await tester.pumpWidget(const CampusVoteApp());
+  final workspace = find.text(title);
+  await tester.scrollUntilVisible(workspace, 300);
+  await tester.tap(workspace);
+  await tester.pumpAndSettle();
 }

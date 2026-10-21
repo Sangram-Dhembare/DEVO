@@ -24,11 +24,96 @@ void main() {
     final roundTrip = ElectionConfig.decode(jsonEncode(original.toJson()));
 
     expect(roundTrip.toJson(), original.toJson());
+    expect(roundTrip.canonicalJson, original.canonicalJson);
     expect(roundTrip.configHash, original.configHash);
+  });
+
+  test('canonicalizes object key order and insignificant JSON whitespace', () {
+    final original = ElectionConfig.fromJson(_validConfig());
+    final reordered = ElectionConfig.fromJson(_reverseKeys(_validConfig()));
+    final spaced = ElectionConfig.decode(
+      ' \n${jsonEncode(_validConfig()).replaceAll(',', ', ')}\t ',
+    );
+
+    expect(reordered.canonicalJson, original.canonicalJson);
+    expect(spaced.canonicalJson, original.canonicalJson);
+    expect(reordered.configHash, original.configHash);
+    expect(spaced.configHash, original.configHash);
+  });
+
+  test('valid field changes produce different configuration digests', () {
+    final originalHash = ElectionConfig.fromJson(_validConfig()).configHash;
+    final changes = <void Function(Map<String, Object?>)>[
+      (json) {
+        json['election_id'] = 'euc-council-2027';
+      },
+      (json) {
+        json['name'] = 'Changed election name';
+      },
+      (json) {
+        _changePosition(json, 'id', 'VP');
+      },
+      (json) {
+        _changePosition(json, 'title', 'Vice President');
+      },
+      (json) {
+        _changePosition(json, 'seats', 2);
+      },
+      (json) {
+        _changePosition(json, 'eligible_voters', 'undergraduates');
+      },
+      (json) {
+        _changeCandidate(json, 0, 'code', 'PRES-03');
+      },
+      (json) {
+        _changeCandidate(json, 0, 'name', 'Changed candidate');
+      },
+      (json) {
+        _changeRule(json, 'abstain_allowed', false);
+      },
+      (json) {
+        _changeRule(json, 'tie_break', 'another tie-break rule');
+      },
+      (json) {
+        _changeRule(json, 'revote_allowed', true);
+      },
+      (json) {
+        _changeWindow(json, 'opens', '2026-11-05T10:00:00+05:30');
+      },
+      (json) {
+        _changeWindow(json, 'closes', '2026-11-05T18:00:00+05:30');
+      },
+      (json) {
+        _changeTrustee(json, 'total', 6);
+      },
+      (json) {
+        _changeTrustee(json, 'threshold', 2);
+      },
+      (json) {
+        json['voter_roll_root'] = List.filled(64, 'b').join();
+      },
+    ];
+
+    for (final change in changes) {
+      final changed = _copyConfig();
+      change(changed);
+      expect(ElectionConfig.fromJson(changed).configHash, isNot(originalHash));
+    }
   });
 
   test('rejects malformed voter-roll roots', () {
     final config = _validConfig()..['voter_roll_root'] = 'not-a-merkle-root';
+
+    expect(
+      () => ElectionConfig.fromJson(config),
+      throwsFormatException,
+    );
+  });
+
+  test('rejects non-integer values for integer fields', () {
+    final config = _validConfig();
+    final position = config['positions']! as List<Object?>;
+    (position.single! as Map<String, Object?>)['seats'] = 1.0;
 
     expect(
       () => ElectionConfig.fromJson(config),
@@ -118,3 +203,53 @@ Map<String, Object?> _validConfig() => {
       'trustees': <String, Object?>{'total': 5, 'threshold': 3},
       'voter_roll_root': List.filled(64, 'a').join(),
     };
+
+Map<String, Object?> _copyConfig() =>
+    jsonDecode(jsonEncode(_validConfig())) as Map<String, Object?>;
+
+Map<String, Object?> _reverseKeys(Map<String, Object?> object) {
+  final reversed = <String, Object?>{};
+  for (final entry in object.entries.toList().reversed) {
+    final value = entry.value;
+    if (value is Map<String, Object?>) {
+      reversed[entry.key] = _reverseKeys(value);
+    } else if (value is List<Object?>) {
+      reversed[entry.key] = value
+          .map((item) =>
+              item is Map<String, Object?> ? _reverseKeys(item) : item)
+          .toList();
+    } else {
+      reversed[entry.key] = value;
+    }
+  }
+  return reversed;
+}
+
+void _changePosition(Map<String, Object?> config, String key, Object? value) {
+  final positions = config['positions']! as List<Object?>;
+  (positions.first! as Map<String, Object?>)[key] = value;
+}
+
+void _changeCandidate(
+  Map<String, Object?> config,
+  int index,
+  String key,
+  Object? value,
+) {
+  final positions = config['positions']! as List<Object?>;
+  final position = positions.first! as Map<String, Object?>;
+  final candidates = position['candidates']! as List<Object?>;
+  (candidates[index]! as Map<String, Object?>)[key] = value;
+}
+
+void _changeRule(Map<String, Object?> config, String key, Object? value) {
+  (config['rules']! as Map<String, Object?>)[key] = value;
+}
+
+void _changeWindow(Map<String, Object?> config, String key, Object? value) {
+  (config['voting_window']! as Map<String, Object?>)[key] = value;
+}
+
+void _changeTrustee(Map<String, Object?> config, String key, Object? value) {
+  (config['trustees']! as Map<String, Object?>)[key] = value;
+}

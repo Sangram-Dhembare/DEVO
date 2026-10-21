@@ -92,8 +92,10 @@ class ElectionConfig {
         'voter_roll_root': voterRollRoot,
       };
 
+  String get canonicalJson => jsonEncode(toJson());
+
   String get configHash =>
-      sha256.convert(utf8.encode(jsonEncode(toJson()))).toString();
+      sha256.convert(utf8.encode(canonicalJson)).toString();
 }
 
 class ElectionPosition {

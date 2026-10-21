@@ -781,7 +781,7 @@ class _ElectionCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Ethereum integration',
+                          'On-chain integration',
                           style:
                               Theme.of(context).textTheme.labelLarge?.copyWith(
                                     color: Colors.white,
@@ -790,7 +790,7 @@ class _ElectionCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Sepolia testnet · proof of concept',
+                          'No contract or testnet integration',
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: const Color(0xFFE5EAF1),
@@ -808,7 +808,7 @@ class _ElectionCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
                       child: Text(
-                        'PLANNED',
+                        'NOT IMPLEMENTED',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: const Color(0xFFE0D2FF),
                               fontWeight: FontWeight.w700,

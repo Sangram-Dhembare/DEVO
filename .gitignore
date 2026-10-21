@@ -10,6 +10,13 @@ coverage/
 .DS_Store
 .idea/
 *.iml
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+android/key.properties
+google-services.json
 
 android/.gradle/
 android/local.properties

@@ -1,5 +1,5 @@
 name: campusvote_app
-description: A Flutter starting point for the CampusVote student election system.
+description: Flutter prototype for student elections with deterministic configuration digests.
 publish_to: "none"
 version: 0.1.0+1
 
