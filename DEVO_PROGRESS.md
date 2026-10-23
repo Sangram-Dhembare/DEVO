@@ -1,6 +1,6 @@
 # CampusVote progress note
 
-Last updated: 21 October 2026
+Last updated: 23 October 2026
 
 This file is a handoff note for the next development session. Use
 `DEVO_Implementation_Roadmap.pdf` for the ordered plan and `DEVO.pdf` as the
@@ -64,6 +64,14 @@ project specification.
    card validation, Solana/Anchor anchoring, offline booth hardening, and a
    supervised pilot, in the order described by the roadmap.
 
+## Specification gap
+
+`DEVO.pdf` requires a voter-roll Merkle root but does not define the record
+format, leaf encoding, entry ordering, or how to handle odd tree levels. Those
+rules determine the root and need to be agreed before implementation. Keep
+voter-roll hashing out of Dart; the security-sensitive core is planned for
+Rust.
+
 ## Safety boundary
 
 Do not describe the current app as election-ready or use it to conduct a real
@@ -73,5 +81,5 @@ election cryptography in the specified Rust core rather than Dart.
 
 ## Recommended next step
 
-Start Phase 1 item 2: implement voter-roll validation and deterministic Merkle
-root generation, using the exact input and hashing requirements in `DEVO.pdf`.
+Start Phase 1 item 2 by defining the voter-roll format and Merkle construction
+rules, then implement them in the Rust core with fixed test vectors.

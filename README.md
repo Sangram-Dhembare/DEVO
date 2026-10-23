@@ -67,6 +67,8 @@ yet.
 - No authentication, voter eligibility checks, NFC check-in, anonymous tokens,
   ballot submission, persistence, or election backend.
 - No voter privacy or ballot security guarantees.
+- No voter-roll import or Merkle-root generation. The specification still
+  needs to define the roll format and exact tree construction rules.
 - No smart contract, blockchain/testnet integration, or deployment.
 - SHA-256 configuration hashing alone does not make election data trustworthy
   or votes verifiable.
